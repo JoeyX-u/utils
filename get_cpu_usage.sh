@@ -1,5 +1,4 @@
 #!/bin/sh
-mkdir /var/metrics
 get_cpu_usage() {
 TIME_INTERVAL=1
 time=$(date "+%Y-%m-%d %H:%M:%S")
@@ -13,6 +12,6 @@ NEXT_TOTAL_CPU_T=$(echo $NEXT_CPU_INFO | awk '{printf ("%f",$1+$2+$3+$4+$5+$6+$7
 SYSTEM_IDLE=`echo ${NEXT_SYS_IDLE} ${LAST_SYS_IDLE} | awk '{print $1-$2}'`
 TOTAL_TIME=`echo ${NEXT_TOTAL_CPU_T} ${LAST_TOTAL_CPU_T} | awk '{print $1-$2}'`
 CPU_USAGE=`echo ${SYSTEM_IDLE} ${TOTAL_TIME} | awk '{printf "%.2f", 100-$1/$2*100}'`
-echo  'container_free_cpu_percent{server_area="ppio"}' `awk -v y=$CPU_USAGE 'BEGIN{printf "%.2f\n",100-y}'` >/var/metrics/container_free_cpu_percent.prom
+echo  `awk -v y=$CPU_USAGE 'BEGIN{printf "%.2f\n",100-y}'`
 }
 get_cpu_usage
